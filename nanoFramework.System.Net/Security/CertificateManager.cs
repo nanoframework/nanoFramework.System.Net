@@ -74,5 +74,27 @@ namespace System.Net.Security
         /// </remarks>
         [MethodImpl(MethodImplOptions.InternalCall)]
         public static extern bool AddCaCertificateBundle(byte[] ca);
+
+        /// <summary>
+        /// Loads the device public key from the device certificate store.
+        /// If public key was found, initializes a new instance of the <see cref="X509Certificate"/>.
+        /// </summary>
+        /// <returns>The certificate that was loaded from the certificate store.</returns>
+        /// <remarks>
+        /// This method is exclusive of nanoFramework. There is no equivalent in .NET framework.
+        /// </remarks>
+        public static X509Certificate GetDevicePublicKey()
+        {
+            byte[] certificate = GetDevicePublicKeyRaw();
+            if (certificate is not null)
+            {
+                return new X509Certificate(certificate);
+            }
+
+            return null;
+        }
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern byte[] GetDevicePublicKeyRaw();
     }
 }
